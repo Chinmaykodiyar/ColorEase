@@ -86,11 +86,11 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     setIsColorblindModeEnabled(prev => !prev);
   }, []);
 
-  const setPalette = useCallback((palette: PaletteType) => {
+  const setPaletteCb = useCallback((palette: PaletteType) => { // Renamed to avoid conflict with existing setPalette in scope
     setCurrentPalette(palette);
   }, []);
 
-  const applyCssFilter = useCallback((filterName: string, settings: FilterSettings | null) => {
+  const applyCssFilterCb = useCallback((filterName: string, settings: FilterSettings | null) => { // Renamed to avoid conflict
     if (!settings) {
       setAppliedFilter('');
       setActiveFilterName(null);
@@ -122,9 +122,9 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
         isColorblindModeEnabled,
         toggleColorblindMode,
         currentPalette,
-        setPalette,
+        setPalette: setPaletteCb, // Use renamed callback
         appliedFilter,
-        applyCssFilter,
+        applyCssFilter: applyCssFilterCb, // Use renamed callback
         activeFilterName,
       }}
     >

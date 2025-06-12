@@ -145,10 +145,10 @@ type Toast = Omit<ToasterToast, "id">
 function toast({ ...props }: Toast) {
   const id = genId()
 
-  const update = (props: ToasterToast) =>
+  const update = (newProps: ToasterToast) => // Corrected type for newProps
     dispatch({
       type: "UPDATE_TOAST",
-      toast: { ...props, id },
+      toast: { ...newProps, id }, // Ensure id is passed along
     })
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
 

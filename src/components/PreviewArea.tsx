@@ -137,7 +137,7 @@ export function PreviewArea() {
                 Using patterns in images helps differentiate elements without relying on color.
             </p>
             <Image 
-                src="https://placehold.co/600x400/A0D2EB/333333.png?text=Pattern+Example&font=Inter" 
+                src="https://placehold.co/600x400.png" 
                 alt="Placeholder image with pattern"
                 data-ai-hint="abstract pattern"
                 width={600}
