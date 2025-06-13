@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -6,7 +7,6 @@ import type { ColorblindnessType, FilterCombination, FilterSettings, PaletteType
 import { generateSafeFilterCombinations } from '@/ai/flows/generate-safe-filter-combinations';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -17,7 +17,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Square, Triangle, Circle, Palette, Sparkles, Eye } from 'lucide-react';
+import { Loader2, Square, Triangle, Circle, Palette, Sparkles } from 'lucide-react';
 
 const colorblindnessTypes: { value: ColorblindnessType; label: string, icon: React.ElementType }[] = [
   { value: 'protanopia', label: 'Protanopia (Red-Blind)', icon: Square },
@@ -36,7 +36,7 @@ const predefinedPalettes: { value: PaletteType; label: string, icon: React.Eleme
 export function SettingsPanel() {
   const {
     isColorblindModeEnabled,
-    toggleColorblindMode,
+    // toggleColorblindMode, // Removed as the toggle is now global
     currentPalette,
     setPalette,
     applyCssFilter,
@@ -72,7 +72,7 @@ export function SettingsPanel() {
 
   const handleApplyFilter = (filterName: string, settings: FilterSettings | null) => {
     if (!isColorblindModeEnabled) {
-      toast({ title: "Mode Disabled", description: "Enable Colorblind Mode to apply filters.", variant: "default" });
+      toast({ title: "Mode Disabled", description: "Enable Colorblind Mode from the header to apply filters.", variant: "default" });
       return;
     }
     applyCssFilter(filterName, settings);
@@ -84,31 +84,8 @@ export function SettingsPanel() {
       <div className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline flex items-center"><Eye className="mr-2 h-5 w-5" />Colorblind Mode</CardTitle>
-            <CardDescription>Toggle global accessibility enhancements.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="colorblind-mode-toggle"
-                checked={isColorblindModeEnabled}
-                onCheckedChange={toggleColorblindMode}
-                aria-label="Toggle Colorblind Mode"
-              />
-              <Label htmlFor="colorblind-mode-toggle" className="text-base">
-                {isColorblindModeEnabled ? 'Enabled' : 'Disabled'}
-              </Label>
-            </div>
-             <p className="text-xs text-muted-foreground mt-2">
-              Enable this to activate custom palettes and filters.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline flex items-center"><Palette className="mr-2 h-5 w-5" />Predefined Palettes</CardTitle>
-            <CardDescription>Choose a color palette optimized for different types of color vision deficiencies.</CardDescription>
+            <CardTitle className="font-headline flex items-center"><Palette className="mr-2 h-5 w-5" />Color Palettes</CardTitle>
+            <CardDescription>Choose a palette. Active when Colorblind Mode is enabled in the header.</CardDescription>
           </CardHeader>
           <CardContent>
             <Select
@@ -130,14 +107,14 @@ export function SettingsPanel() {
                 ))}
               </SelectContent>
             </Select>
-            {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode to change palettes.</p>}
+            {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode in the header to change palettes.</p>}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle className="font-headline flex items-center"><Sparkles className="mr-2 h-5 w-5" />AI-Powered Filters</CardTitle>
-            <CardDescription>Generate and apply custom CSS filters to enhance visual clarity.</CardDescription>
+            <CardDescription>Generate and apply CSS filters. Active when Colorblind Mode is enabled.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -162,10 +139,12 @@ export function SettingsPanel() {
               </Select>
             </div>
             
-            <Button onClick={handleGenerateFilters} disabled={isLoadingFilters} className="w-full">
+            <Button onClick={handleGenerateFilters} disabled={isLoadingFilters || !isColorblindModeEnabled} className="w-full">
               {isLoadingFilters && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Generate Safe Filters
             </Button>
+             {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode in the header to generate filters.</p>}
+
 
             {generatedFilters.length > 0 && (
               <div className="space-y-2 pt-4">
@@ -185,7 +164,7 @@ export function SettingsPanel() {
                     </Button>
                   ))}
                 </ScrollArea>
-                 {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode to apply filters.</p>}
+                 {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode in the header to apply filters.</p>}
                  {isColorblindModeEnabled && activeFilterName && (
                     <Button
                         variant="ghost"
@@ -207,7 +186,7 @@ export function SettingsPanel() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Chromatic Harmony allows runtime adjustments. For system-wide colorblind settings, please check your operating system or browser accessibility options. Future web standards may allow for better auto-detection.
+              Chromatic Harmony allows runtime adjustments within this preview. For system-wide colorblind settings, please check your operating system or browser accessibility options.
             </p>
           </CardContent>
         </Card>
