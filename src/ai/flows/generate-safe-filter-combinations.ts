@@ -54,6 +54,7 @@ export async function generateSafeFilterCombinations(
 // Define the prompt
 const generateSafeFilterCombinationsPrompt = ai.definePrompt({
   name: 'generateSafeFilterCombinationsPrompt',
+  model: 'googleai/gemini-1.5-flash-latest', // Specify the model here
   input: {schema: GenerateSafeFilterCombinationsInputSchema},
   output: {schema: GenerateSafeFilterCombinationsOutputSchema},
   prompt: `You are an accessibility expert specializing in creating colorblind-safe filter combinations.
