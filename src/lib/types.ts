@@ -1,12 +1,21 @@
 export type ColorblindnessType = "protanopia" | "deuteranopia" | "tritanopia";
 
+// This interface now reflects an object with specific, optional CSS filter properties
 export interface FilterSettings {
-  [key: string]: number; // e.g., { brightness: 1.2, contrast: 0.9 }
+  brightness?: number;
+  contrast?: number;
+  saturate?: number;
+  grayscale?: number;
+  sepia?: number;
+  'hue-rotate'?: number; // CSS property name for hue-rotate
+  invert?: number;
+  opacity?: number;
+  blur?: number;
 }
 
 export interface FilterCombination {
   name: string;
-  filterSettings: FilterSettings;
+  filterSettings: FilterSettings; // Uses the more specific FilterSettings type
   description: string;
 }
 

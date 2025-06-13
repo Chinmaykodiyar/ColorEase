@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { FilterSettings, PaletteType } from '@/lib/types';
+import type { FilterSettings, PaletteType } from '@/lib/types'; // FilterSettings type is updated
 import { applyPalette } from '@/lib/palettes';
 
 interface AccessibilityContextProps {
@@ -86,11 +86,11 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     setIsColorblindModeEnabled(prev => !prev);
   }, []);
 
-  const setPaletteCb = useCallback((palette: PaletteType) => { // Renamed to avoid conflict with existing setPalette in scope
+  const setPaletteCb = useCallback((palette: PaletteType) => {
     setCurrentPalette(palette);
   }, []);
 
-  const applyCssFilterCb = useCallback((filterName: string, settings: FilterSettings | null) => { // Renamed to avoid conflict
+  const applyCssFilterCb = useCallback((filterName: string, settings: FilterSettings | null) => {
     if (!settings) {
       setAppliedFilter('');
       setActiveFilterName(null);
@@ -98,14 +98,21 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     }
     
     const filterString = Object.entries(settings)
+      // Ensure only entries where value is a number are processed (it should be with the new schema)
+      .filter(([, value]) => typeof value === 'number') 
       .map(([key, value]) => {
+        // value is now asserted as number due to the filter above, but TypeScript might still need explicit checks or assertions
+        const numericValue = value as number; 
         if (key === 'hue-rotate') {
-          return `${key}(${value}deg)`;
+          return `${key}(${numericValue}deg)`;
         }
-        // Assuming other values are percentages or unitless based on common CSS filters
-        // For example, brightness(1.2) or contrast(150%)
-        // Here we assume unitless for simplicity, can be expanded
-        return `${key}(${value})`;
+        if (key === 'blur') {
+          return `${key}(${numericValue}px)`; // Add px for blur
+        }
+        // For other filters like brightness, contrast, saturate (0-1 or higher), grayscale (0-1), sepia (0-1), invert (0-1), opacity (0-1)
+        // these are typically unitless or represent a factor/percentage (where 1 = 100%).
+        // The schema descriptions guide the LLM for appropriate numeric ranges.
+        return `${key}(${numericValue})`;
       })
       .join(' ');
     setAppliedFilter(filterString);
@@ -122,9 +129,9 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
         isColorblindModeEnabled,
         toggleColorblindMode,
         currentPalette,
-        setPalette: setPaletteCb, // Use renamed callback
+        setPalette: setPaletteCb,
         appliedFilter,
-        applyCssFilter: applyCssFilterCb, // Use renamed callback
+        applyCssFilter: applyCssFilterCb,
         activeFilterName,
       }}
     >
