@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { FilterSettings, PaletteType } from '@/lib/types'; // FilterSettings type is updated
+import type { FilterSettings, PaletteType } from '@/lib/types';
 import { applyPalette } from '@/lib/palettes';
 
 interface AccessibilityContextProps {
@@ -10,7 +10,7 @@ interface AccessibilityContextProps {
   toggleColorblindMode: () => void;
   currentPalette: PaletteType;
   setPalette: (palette: PaletteType) => void;
-  appliedFilter: string; // CSS filter string
+  appliedFilter: string;
   applyCssFilter: (filterName: string, settings: FilterSettings | null) => void;
   activeFilterName: string | null;
 }
@@ -24,6 +24,7 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
   const [activeFilterName, setActiveFilterName] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
+  // 1. On mount, read stored preferences from localStorage
   useEffect(() => {
     setIsMounted(true);
     const storedMode = localStorage.getItem('colorblindModeEnabled');
@@ -44,42 +45,38 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     }
   }, []);
 
+  // 2. Persist state changes to localStorage and apply palette to document.body
   useEffect(() => {
     if (!isMounted) return;
     localStorage.setItem('colorblindModeEnabled', JSON.stringify(isColorblindModeEnabled));
-    if (isColorblindModeEnabled) {
-      applyPalette(currentPalette);
-      document.body.style.filter = appliedFilter;
-    } else {
-      applyPalette('default'); // Reset to default palette
-      document.body.style.filter = ''; // Clear filters
-    }
-  }, [isColorblindModeEnabled, currentPalette, appliedFilter, isMounted]);
-  
-  useEffect(() => {
-    if (!isMounted) return;
-    if (isColorblindModeEnabled) {
-      applyPalette(currentPalette);
-    } else {
-      applyPalette('default');
-    }
     localStorage.setItem('selectedPalette', currentPalette);
-  }, [currentPalette, isColorblindModeEnabled, isMounted]);
 
+    if (isColorblindModeEnabled) {
+      applyPalette(currentPalette);
+    } else {
+      applyPalette('default'); // When mode is off, always use default palette
+    }
+  }, [isColorblindModeEnabled, currentPalette, isMounted]);
+
+  // 3. Persist and apply CSS filter to the content wrapper for transitions
   useEffect(() => {
     if (!isMounted) return;
-    if (isColorblindModeEnabled) {
-      document.body.style.filter = appliedFilter;
-    } else {
-      document.body.style.filter = '';
-    }
     localStorage.setItem('appliedFilter', appliedFilter);
     if (activeFilterName) {
       localStorage.setItem('activeFilterName', activeFilterName);
     } else {
       localStorage.removeItem('activeFilterName');
     }
-  }, [appliedFilter, activeFilterName, isColorblindModeEnabled, isMounted]);
+
+    const contentElement = document.querySelector('.content-wrapper') as HTMLElement;
+    if (contentElement) {
+      if (isColorblindModeEnabled) {
+        contentElement.style.filter = appliedFilter;
+      } else {
+        contentElement.style.filter = ''; // When mode is off, clear filters
+      }
+    }
+  }, [isColorblindModeEnabled, appliedFilter, activeFilterName, isMounted]);
 
 
   const toggleColorblindMode = useCallback(() => {
@@ -98,20 +95,15 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     }
     
     const filterString = Object.entries(settings)
-      // Ensure only entries where value is a number are processed (it should be with the new schema)
       .filter(([, value]) => typeof value === 'number') 
       .map(([key, value]) => {
-        // value is now asserted as number due to the filter above, but TypeScript might still need explicit checks or assertions
         const numericValue = value as number; 
         if (key === 'hue-rotate') {
           return `${key}(${numericValue}deg)`;
         }
         if (key === 'blur') {
-          return `${key}(${numericValue}px)`; // Add px for blur
+          return `${key}(${numericValue}px)`;
         }
-        // For other filters like brightness, contrast, saturate (0-1 or higher), grayscale (0-1), sepia (0-1), invert (0-1), opacity (0-1)
-        // these are typically unitless or represent a factor/percentage (where 1 = 100%).
-        // The schema descriptions guide the LLM for appropriate numeric ranges.
         return `${key}(${numericValue})`;
       })
       .join(' ');
@@ -131,7 +123,8 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
         activeFilterName,
       }}
     >
-      <div className={`content-wrapper ${isColorblindModeEnabled ? currentPalette !== 'default' ? `theme-${currentPalette}` : '' : ''}`}>
+      {/* This div's className is now static, fixing the hydration error */}
+      <div className="content-wrapper">
         {children}
       </div>
     </AccessibilityContext.Provider>
