@@ -119,10 +119,6 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     setActiveFilterName(filterName);
   }, []);
 
-  if (!isMounted) {
-    return null; // Or a loading spinner
-  }
-
   return (
     <AccessibilityContext.Provider
       value={{

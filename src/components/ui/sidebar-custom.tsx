@@ -52,11 +52,6 @@ export function SidebarProvider({ children, defaultOpen = false }: SidebarProvid
     }
   }, [isMobile, defaultOpen, isMounted]);
 
-  if (!isMounted) {
-    return null; 
-  }
-
-
   return (
     <SidebarContext.Provider value={{ isOpen, setIsOpen, isMobile }}>
       {children}
