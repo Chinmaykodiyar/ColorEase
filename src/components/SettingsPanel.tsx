@@ -17,26 +17,18 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Square, Triangle, Circle, Palette, Sparkles } from 'lucide-react';
+import { Loader2, Square, Triangle, Circle, Palette, Sparkles, SlidersHorizontal } from 'lucide-react';
 
-const colorblindnessTypes: { value: ColorblindnessType; label: string, icon: React.ElementType }[] = [
-  { value: 'protanopia', label: 'Protanopia (Red-Blind)', icon: Square },
-  { value: 'deuteranopia', label: 'Deuteranopia (Green-Blind)', icon: Triangle },
-  { value: 'tritanopia', label: 'Tritanopia (Blue-Blind)', icon: Circle },
+const simulationTypes: { value: PaletteType; label: string, icon: React.ElementType }[] = [
+  { value: 'default', label: 'Normal Vision', icon: Palette },
+  { value: 'protanopia', label: 'Protanopia Simulation', icon: Square },
+  { value: 'deuteranopia', label: 'Deuteranopia Simulation', icon: Triangle },
+  { value: 'tritanopia', label: 'Tritanopia Simulation', icon: Circle },
 ];
-
-const predefinedPalettes: { value: PaletteType; label: string, icon: React.ElementType }[] = [
-  { value: 'default', label: 'Default Palette', icon: Palette },
-  { value: 'protanopia', label: 'Protanopia Optimized', icon: Square },
-  { value: 'deuteranopia', label: 'Deuteranopia Optimized', icon: Triangle },
-  { value: 'tritanopia', label: 'Tritanopia Optimized', icon: Circle },
-];
-
 
 export function SettingsPanel() {
   const {
     isColorblindModeEnabled,
-    // toggleColorblindMode, // Removed as the toggle is now global
     currentPalette,
     setPalette,
     applyCssFilter,
@@ -46,7 +38,7 @@ export function SettingsPanel() {
   const [selectedColorblindnessType, setSelectedColorblindnessType] = useState<ColorblindnessType>('protanopia');
   const [generatedFilters, setGeneratedFilters] = useState<FilterCombination[]>([]);
   const [isLoadingFilters, setIsLoadingFilters] = useState(false);
-  const [userPreferences, setUserPreferences] = useState(''); // Not used in UI yet, for future enhancement
+  const [userPreferences, setUserPreferences] = useState('');
 
 
   const handleGenerateFilters = async () => {
@@ -59,7 +51,7 @@ export function SettingsPanel() {
       });
       if (result && result.filterCombinations) {
         setGeneratedFilters(result.filterCombinations);
-        toast({ title: "Filters Generated", description: `${result.filterCombinations.length} filter combinations ready.` });
+        toast({ title: "Filters Generated", description: `${result.filterCombinations.length} corrective filter combinations ready.` });
       } else {
         toast({ title: "Filter Generation Failed", description: "Could not generate filters.", variant: "destructive" });
       }
@@ -72,32 +64,42 @@ export function SettingsPanel() {
 
   const handleApplyFilter = (filterName: string, settings: FilterSettings | null) => {
     if (!isColorblindModeEnabled) {
-      toast({ title: "Mode Disabled", description: "Enable Colorblind Mode from the header to apply filters.", variant: "default" });
+      toast({ title: "Mode Disabled", description: "Enable Accessibility Mode from the header to apply filters.", variant: "default" });
       return;
     }
     applyCssFilter(filterName, settings);
-     toast({ title: "Filter Applied", description: `${filterName} is now active.` });
+    toast({ title: "Filter Applied", description: `${filterName} is now active.` });
   };
+  
+  // When a simulation is active, we should clear any corrective CSS filters.
+  const handleSetPalette = (palette: PaletteType) => {
+    setPalette(palette);
+    if (palette !== 'default' && activeFilterName) {
+        applyCssFilter("None", null);
+        toast({ title: "Simulation Applied", description: "Corrective CSS filters cleared to show accurate simulation." });
+    }
+  }
+
 
   return (
     <ScrollArea className="h-full p-4">
       <div className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline flex items-center"><Palette className="mr-2 h-5 w-5" />Color Palettes</CardTitle>
-            <CardDescription>Choose a palette. Active when Colorblind Mode is enabled in the header.</CardDescription>
+            <CardTitle className="font-headline flex items-center"><Palette className="mr-2 h-5 w-5" />Vision Simulation</CardTitle>
+            <CardDescription>Simulate how users with different types of color vision deficiency perceive colors. This is active when Mode is on.</CardDescription>
           </CardHeader>
           <CardContent>
             <Select
               value={currentPalette}
-              onValueChange={(value) => setPalette(value as PaletteType)}
+              onValueChange={(value) => handleSetPalette(value as PaletteType)}
               disabled={!isColorblindModeEnabled}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a palette" />
+                <SelectValue placeholder="Select a simulation" />
               </SelectTrigger>
               <SelectContent>
-                {predefinedPalettes.map((palette) => (
+                {simulationTypes.map((palette) => (
                   <SelectItem key={palette.value} value={palette.value}>
                     <div className="flex items-center">
                       <palette.icon className="mr-2 h-4 w-4" />
@@ -107,14 +109,32 @@ export function SettingsPanel() {
                 ))}
               </SelectContent>
             </Select>
-            {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode in the header to change palettes.</p>}
+            {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Mode in the header to change simulation.</p>}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline flex items-center"><Sparkles className="mr-2 h-5 w-5" />AI-Powered Filters</CardTitle>
-            <CardDescription>Generate and apply CSS filters. Active when Colorblind Mode is enabled.</CardDescription>
+            <CardTitle className="font-headline flex items-center"><SlidersHorizontal className="mr-2 h-5 w-5" />Corrective Filters</CardTitle>
+            <CardDescription>These filters adjust colors to make them more distinct for colorblind users. This is separate from simulation.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+             <Button
+              variant="ghost"
+              size="sm"
+              className="w-full mt-2"
+              onClick={() => handleSetPalette("default")}
+              disabled={!isColorblindModeEnabled || currentPalette === 'default'}
+          >
+              Turn off simulation to use filters
+          </Button>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline flex items-center"><Sparkles className="mr-2 h-5 w-5" />AI-Powered Corrective Filters</CardTitle>
+            <CardDescription>Generate and apply CSS filters to improve color distinction. Active when Mode is enabled and simulation is off.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -122,6 +142,7 @@ export function SettingsPanel() {
               <Select
                 value={selectedColorblindnessType}
                 onValueChange={(value) => setSelectedColorblindnessType(value as ColorblindnessType)}
+                 disabled={!isColorblindModeEnabled || currentPalette !== 'default'}
               >
                 <SelectTrigger id="colorblindness-type-select">
                   <SelectValue placeholder="Select type" />
@@ -139,11 +160,11 @@ export function SettingsPanel() {
               </Select>
             </div>
             
-            <Button onClick={handleGenerateFilters} disabled={isLoadingFilters || !isColorblindModeEnabled} className="w-full">
+            <Button onClick={handleGenerateFilters} disabled={isLoadingFilters || !isColorblindModeEnabled || currentPalette !== 'default'} className="w-full">
               {isLoadingFilters && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Generate Safe Filters
+              Generate Corrective Filters
             </Button>
-             {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode in the header to generate filters.</p>}
+             {isColorblindModeEnabled && currentPalette !== 'default' && <p className="text-xs text-muted-foreground mt-2">Turn off simulation to generate filters.</p>}
 
 
             {generatedFilters.length > 0 && (
@@ -157,14 +178,13 @@ export function SettingsPanel() {
                       size="sm"
                       className="w-full justify-start mb-2 text-left"
                       onClick={() => handleApplyFilter(filter.name, filter.filterSettings)}
-                      disabled={!isColorblindModeEnabled}
+                      disabled={!isColorblindModeEnabled || currentPalette !== 'default'}
                       title={filter.description}
                     >
                       {filter.name}
                     </Button>
                   ))}
                 </ScrollArea>
-                 {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Colorblind Mode in the header to apply filters.</p>}
                  {isColorblindModeEnabled && activeFilterName && (
                     <Button
                         variant="ghost"
@@ -180,18 +200,13 @@ export function SettingsPanel() {
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline">System Preferences</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Chromatic Harmony allows runtime adjustments within this preview. For system-wide colorblind settings, please check your operating system or browser accessibility options.
-            </p>
-          </CardContent>
-        </Card>
-
       </div>
     </ScrollArea>
   );
 }
+
+const colorblindnessTypes: { value: ColorblindnessType; label: string, icon: React.ElementType }[] = [
+  { value: 'protanopia', label: 'Protanopia (Red-Blind)', icon: Square },
+  { value: 'deuteranopia', label: 'Deuteranopia (Green-Blind)', icon: Triangle },
+  { value: 'tritanopia', label: 'Tritanopia (Blue-Blind)', icon: Circle },
+];

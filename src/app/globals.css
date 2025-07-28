@@ -115,42 +115,22 @@ body {
   }
 }
 
-/* Custom palette classes */
-.theme-protanopia {
-  /* Define Protanopia-friendly HSL values */
-  --primary: 45 90% 65%; /* Example: Yellow-Orange */
-  --primary-foreground: 45 50% 15%;
-  --accent: 210 80% 60%; /* Example: Strong Blue */
-  --accent-foreground: 210 50% 15%;
-  --chart-1: 45 90% 65%;
-  --chart-2: 210 80% 60%;
-  --chart-3: 0 0% 50%; /* Grayscale */
-  --chart-4: 120 40% 50%; /* Muted Green (if distinguishable) or another blue/yellow shade */
-  --chart-5: 60 80% 55%; /* Yellow */
+/* SVG Filters for Color-Blindness Simulation */
+.filters-container {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
-.theme-deuteranopia {
-  /* Define Deuteranopia-friendly HSL values */
-  --primary: 30 95% 60%; /* Example: Orange */
-  --primary-foreground: 30 50% 15%;
-  --accent: 220 85% 65%; /* Example: Vivid Blue */
-  --accent-foreground: 220 50% 15%;
-  --chart-1: 30 95% 60%;
-  --chart-2: 220 85% 65%;
-  --chart-3: 0 0% 55%; /* Grayscale */
-  --chart-4: 260 50% 60%; /* Purple shade */
-  --chart-5: 50 90% 60%; /* Yellow */
+.simulate-protanopia .content-wrapper {
+  filter: url(#protanopia-filter);
 }
 
-.theme-tritanopia {
-  /* Define Tritanopia-friendly HSL values */
-  --primary: 0 85% 60%; /* Example: Bright Red */
-  --primary-foreground: 0 50% 15%;
-  --accent: 180 70% 50%; /* Example: Teal/Cyan */
-  --accent-foreground: 180 50% 15%;
-  --chart-1: 0 85% 60%;
-  --chart-2: 180 70% 50%;
-  --chart-3: 0 0% 60%; /* Grayscale */
-  --chart-4: 300 60% 60%; /* Pink/Magenta shade */
-  --chart-5: 270 70% 65%; /* Purple */
+.simulate-deuteranopia .content-wrapper {
+  filter: url(#deuteranopia-filter);
+}
+
+.simulate-tritanopia .content-wrapper {
+  filter: url(#tritanopia-filter);
 }

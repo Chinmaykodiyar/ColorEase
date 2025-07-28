@@ -24,7 +24,6 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
   const [activeFilterName, setActiveFilterName] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  // 1. On mount, read stored preferences from localStorage
   useEffect(() => {
     setIsMounted(true);
     const storedMode = localStorage.getItem('colorblindModeEnabled');
@@ -45,7 +44,6 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     }
   }, []);
 
-  // 2. Persist state changes to localStorage and apply palette to document.body
   useEffect(() => {
     if (!isMounted) return;
     localStorage.setItem('colorblindModeEnabled', JSON.stringify(isColorblindModeEnabled));
@@ -54,11 +52,10 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
     if (isColorblindModeEnabled) {
       applyPalette(currentPalette);
     } else {
-      applyPalette('default'); // When mode is off, always use default palette
+      applyPalette('default'); 
     }
   }, [isColorblindModeEnabled, currentPalette, isMounted]);
 
-  // 3. Persist and apply CSS filter to the content wrapper for transitions
   useEffect(() => {
     if (!isMounted) return;
     localStorage.setItem('appliedFilter', appliedFilter);
@@ -70,13 +67,14 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
 
     const contentElement = document.querySelector('.content-wrapper') as HTMLElement;
     if (contentElement) {
-      if (isColorblindModeEnabled) {
+      if (isColorblindModeEnabled && currentPalette === 'default') {
         contentElement.style.filter = appliedFilter;
       } else {
-        contentElement.style.filter = ''; // When mode is off, clear filters
+        // Clear CSS filters if mode is off OR if a simulation palette is active
+        contentElement.style.filter = '';
       }
     }
-  }, [isColorblindModeEnabled, appliedFilter, activeFilterName, isMounted]);
+  }, [isColorblindModeEnabled, appliedFilter, activeFilterName, isMounted, currentPalette]);
 
 
   const toggleColorblindMode = useCallback(() => {
@@ -104,12 +102,15 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
         if (key === 'blur') {
           return `${key}(${numericValue}px)`;
         }
+        // For properties like brightness, contrast, etc., the value is unitless
         return `${key}(${numericValue})`;
       })
       .join(' ');
     setAppliedFilter(filterString);
     setActiveFilterName(filterName);
   }, []);
+
+  const bodyClassName = isMounted && isColorblindModeEnabled ? `simulate-${currentPalette}` : '';
 
   return (
     <AccessibilityContext.Provider
@@ -123,9 +124,10 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
         activeFilterName,
       }}
     >
-      {/* This div's className is now static, fixing the hydration error */}
-      <div className="content-wrapper">
-        {children}
+      <div className={bodyClassName}>
+        <div className="content-wrapper">
+          {children}
+        </div>
       </div>
     </AccessibilityContext.Provider>
   );
