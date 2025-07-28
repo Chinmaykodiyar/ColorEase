@@ -6,10 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Square, Triangle, Circle, Info, CheckCircle, XCircle, AlertTriangle as LucideAlertTriangle } from 'lucide-react';
+import { Square, Triangle, Circle, Info, CheckCircle, XCircle, AlertTriangle as LucideAlertTriangle, Upload } from 'lucide-react';
 import { BarChart, CartesianGrid, XAxis, YAxis, Bar, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import Image from 'next/image';
+import { Input } from '@/components/ui/input';
 
 
 const chartData = [
@@ -29,11 +30,53 @@ const chartConfig = {
 
 export function PreviewArea() {
   const [progress, setProgress] = React.useState(66);
+  const [imageSrc, setImageSrc] = React.useState<string | null>("https://placehold.co/600x400.png");
+  const [isDragging, setIsDragging] = React.useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
 
   React.useEffect(() => {
     const timer = setTimeout(() => setProgress(Math.random() * 80 + 20), 1000);
     return () => clearTimeout(timer);
   }, [progress]);
+
+  const handleFile = (file: File) => {
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageSrc(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileSelectClick = () => {
+    fileInputRef.current?.click();
+  };
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFile(e.target.files[0]);
+    }
+  };
 
 
   return (
@@ -132,18 +175,42 @@ export function PreviewArea() {
         <CardHeader>
             <CardTitle className="font-headline">Image with Textures/Patterns</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col items-center space-y-4">
+        <CardContent 
+          className="flex flex-col items-center space-y-4"
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
             <p className="text-sm text-muted-foreground">
-                Using patterns in images helps differentiate elements without relying on color.
+                Using patterns in images helps differentiate elements without relying on color. Drag and drop an image below.
             </p>
-            <Image 
-                src="https://placehold.co/600x400.png" 
-                alt="Placeholder image with pattern"
-                data-ai-hint="abstract pattern"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-md"
-            />
+            <div 
+              className={`w-full max-w-2xl h-80 border-2 border-dashed rounded-lg flex items-center justify-center text-center transition-colors
+                ${isDragging ? 'border-primary bg-primary/10' : 'border-border'}`}
+              onClick={handleFileSelectClick}
+            >
+              {imageSrc ? (
+                  <Image 
+                      src={imageSrc} 
+                      alt="Uploaded or placeholder image"
+                      width={600}
+                      height={400}
+                      className="rounded-lg shadow-md max-h-full w-auto object-contain"
+                  />
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <Upload className="h-10 w-10" />
+                  <span>Drag & Drop your image here, or click to select</span>
+                </div>
+              )}
+            </div>
+             <Input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+                accept="image/*"
+              />
              <div className="grid grid-cols-3 gap-4 w-full max-w-md">
                 <div className="h-20 bg-primary rounded flex items-center justify-center text-primary-foreground">
                     <CheckCircle className="h-8 w-8" />
