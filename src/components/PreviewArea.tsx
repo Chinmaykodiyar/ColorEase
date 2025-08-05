@@ -29,16 +29,23 @@ const chartConfig = {
 
 
 export function PreviewArea() {
-  const [progress, setProgress] = React.useState(66);
+  const [progress, setProgress] = React.useState(0); // Initialize with a static value
   const [imageSrc, setImageSrc] = React.useState<string | null>("https://placehold.co/600x400.png");
   const [isDragging, setIsDragging] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
 
   React.useEffect(() => {
-    const timer = setTimeout(() => setProgress(Math.random() * 80 + 20), 1000);
-    return () => clearTimeout(timer);
-  }, [progress]);
+    // Set initial random progress on client mount
+    setProgress(Math.random() * 80 + 20);
+
+    // Set up the interval to update progress
+    const timer = setInterval(() => {
+      setProgress(Math.random() * 80 + 20);
+    }, 2000); // Update every 2 seconds for a smoother effect
+
+    return () => clearInterval(timer); // Cleanup interval on component unmount
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   const handleFile = (file: File) => {
     if (file && file.type.startsWith('image/')) {
