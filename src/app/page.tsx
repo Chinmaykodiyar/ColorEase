@@ -48,7 +48,7 @@ export default function Home() {
                 id="global-colorblind-mode-toggle"
                 checked={isColorblindModeEnabled}
                 onCheckedChange={toggleColorblindMode}
-                aria-label="Toggle Global Colorblind Mode"
+                aria-label="Toggle Accessibility Mode"
               />
               <Label htmlFor="global-colorblind-mode-toggle" className="text-sm font-medium flex items-center cursor-pointer">
                 <Eye className="mr-2 h-5 w-5 text-muted-foreground" />

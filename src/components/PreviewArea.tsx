@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -29,7 +30,7 @@ const chartConfig = {
 
 
 export function PreviewArea() {
-  const [progress, setProgress] = React.useState(0); // Initialize with a static value
+  const [progress, setProgress] = React.useState(0);
   const [imageSrc, setImageSrc] = React.useState<string | null>("https://placehold.co/600x400.png");
   const [isDragging, setIsDragging] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -37,15 +38,14 @@ export function PreviewArea() {
 
   React.useEffect(() => {
     // Set initial random progress on client mount
-    setProgress(Math.random() * 80 + 20);
+    setProgress(Math.floor(Math.random() * 80) + 20);
 
-    // Set up the interval to update progress
     const timer = setInterval(() => {
-      setProgress(Math.random() * 80 + 20);
-    }, 2000); // Update every 2 seconds for a smoother effect
+      setProgress(Math.floor(Math.random() * 80) + 20);
+    }, 2500);
 
-    return () => clearInterval(timer); // Cleanup interval on component unmount
-  }, []); // Empty dependency array ensures this runs only once on mount
+    return () => clearInterval(timer);
+  }, []);
 
   const handleFile = (file: File) => {
     if (file && file.type.startsWith('image/')) {
@@ -88,36 +88,34 @@ export function PreviewArea() {
 
   return (
     <div className="space-y-8">
-      <Card>
+      <Card className="animate-fade-in-up">
         <CardHeader>
           <CardTitle className="font-headline">Text & Typography</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-lg">This is a sample paragraph showing default text rendering. <span className="text-primary">This text is primary color.</span> <span className="text-accent">This text is accent color.</span></p>
+          <p className="text-lg">This is a sample paragraph showing default text rendering. <span className="text-primary font-medium">This text is primary color.</span> <span className="text-accent-foreground bg-accent p-1 rounded-md">This text is accent color.</span></p>
           <h2 className="text-2xl font-headline text-secondary-foreground">Secondary Heading Example</h2>
           <p className="text-sm text-muted-foreground">This is muted text, often used for less important information or captions.</p>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <CardHeader>
           <CardTitle className="font-headline">Interactive Elements</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Button>Default Button</Button>
-          <Button variant="secondary">Secondary Button</Button>
-          <Button variant="destructive">Destructive Button</Button>
-          <Button variant="outline">Outline Button</Button>
-          <Button variant="ghost">Ghost Button</Button>
+        <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <Button>Primary Action</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="destructive">Destructive</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
           <Button variant="link">Link Button</Button>
-          
-          <Button><Square className="mr-2 h-4 w-4" /> Button with Square</Button>
-          <Button><Triangle className="mr-2 h-4 w-4" /> Button with Triangle</Button>
-          <Button><Circle className="mr-2 h-4 w-4" /> Button with Circle</Button>
+          <Button><Square className="mr-2 h-4 w-4" /> With Icon</Button>
+          <Button variant="secondary"><Triangle className="mr-2 h-4 w-4" /> Icon Button</Button>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
         <CardHeader>
           <CardTitle className="font-headline">Alerts & Badges</CardTitle>
         </CardHeader>
@@ -129,7 +127,7 @@ export function PreviewArea() {
           </Alert>
           <Alert variant="destructive">
             <LucideAlertTriangle className="h-4 w-4" />
-            <AlertTitle className="font-headline">Error</AlertTitle>
+            <AlertTitle className="font-headline">Error Condition</AlertTitle>
             <AlertDescription>This is a destructive/error alert.</AlertDescription>
           </Alert>
           <div className="space-x-2">
@@ -141,21 +139,63 @@ export function PreviewArea() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">Progress Indicator</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Progress value={progress} className="w-full" />
-           <p className="text-sm text-muted-foreground mt-2 text-center">Current progress: {Math.round(progress)}%</p>
-        </CardContent>
-      </Card>
+      <div className="grid md:grid-cols-2 gap-8">
+        <Card className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <CardHeader>
+            <CardTitle className="font-headline">Progress Indicator</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Progress value={progress} className="w-full" />
+            <p className="text-sm text-muted-foreground mt-2 text-center">Current progress: {Math.round(progress)}%</p>
+          </CardContent>
+        </Card>
 
-      <Card>
+        <Card className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          <CardHeader>
+              <CardTitle className="font-headline">Image Upload</CardTitle>
+          </CardHeader>
+          <CardContent 
+            className="flex flex-col items-center space-y-4"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+              <div 
+                className={`w-full h-48 border-2 border-dashed rounded-lg flex items-center justify-center text-center transition-colors cursor-pointer
+                  ${isDragging ? 'border-primary bg-primary/10' : 'border-border'}`}
+                onClick={handleFileSelectClick}
+              >
+                {imageSrc ? (
+                    <Image 
+                        src={imageSrc} 
+                        alt="Uploaded or placeholder image"
+                        width={600}
+                        height={400}
+                        className="rounded-lg shadow-md max-h-full w-auto object-contain"
+                    />
+                ) : (
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                    <Upload className="h-10 w-10" />
+                    <span>Drag & Drop or Click to Upload</span>
+                  </div>
+                )}
+              </div>
+               <Input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept="image/*"
+                />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
         <CardHeader>
           <CardTitle className="font-headline">Sample Chart</CardTitle>
           <CardDescription>
-            Charts use distinct colors. For enhanced accessibility, patterns or textures can be applied to chart elements (e.g., SVG patterns for bars).
+            Charts use distinct colors. For enhanced accessibility, patterns or textures can be applied to chart elements.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -177,67 +217,6 @@ export function PreviewArea() {
           </ChartContainer>
         </CardContent>
       </Card>
-
-      <Card>
-        <CardHeader>
-            <CardTitle className="font-headline">Image with Textures/Patterns</CardTitle>
-        </CardHeader>
-        <CardContent 
-          className="flex flex-col items-center space-y-4"
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-            <p className="text-sm text-muted-foreground">
-                Using patterns in images helps differentiate elements without relying on color. Drag and drop an image below.
-            </p>
-            <div 
-              className={`w-full max-w-2xl h-80 border-2 border-dashed rounded-lg flex items-center justify-center text-center transition-colors
-                ${isDragging ? 'border-primary bg-primary/10' : 'border-border'}`}
-              onClick={handleFileSelectClick}
-            >
-              {imageSrc ? (
-                  <Image 
-                      src={imageSrc} 
-                      alt="Uploaded or placeholder image"
-                      width={600}
-                      height={400}
-                      className="rounded-lg shadow-md max-h-full w-auto object-contain"
-                  />
-              ) : (
-                <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                  <Upload className="h-10 w-10" />
-                  <span>Drag & Drop your image here, or click to select</span>
-                </div>
-              )}
-            </div>
-             <Input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                className="hidden"
-                accept="image/*"
-              />
-             <div className="grid grid-cols-3 gap-4 w-full max-w-md">
-                <div className="h-20 bg-primary rounded flex items-center justify-center text-primary-foreground">
-                    <CheckCircle className="h-8 w-8" />
-                </div>
-                <div 
-                    className="h-20 bg-secondary rounded flex items-center justify-center text-secondary-foreground"
-                    style={{backgroundImage: `url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-1 1l2-2M0 10l10-10M9 11l2-2' stroke='%23${'888888'}' stroke-width='1'/%3E%3C/svg%3E")`}}
-                >
-                    <XCircle className="h-8 w-8" />
-                </div>
-                 <div 
-                    className="h-20 bg-accent rounded flex items-center justify-center text-accent-foreground"
-                    style={{backgroundImage: `url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23${'555555'}' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H0L6 0z'/%3E%3C/g%3E%3C/svg%3E")`}}
-                >
-                    <LucideAlertTriangle className="h-8 w-8" />
-                </div>
-            </div>
-        </CardContent>
-      </Card>
-
     </div>
   );
 }
