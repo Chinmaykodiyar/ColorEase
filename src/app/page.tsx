@@ -1,66 +1,34 @@
 
-"use client"; // Required for SidebarProvider and other client components
+"use client";
 
-import { SettingsPanel } from '@/components/SettingsPanel';
-import { PreviewArea } from '@/components/PreviewArea';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarInset,
-  SidebarProvider,
-  SidebarTitle,
-  SidebarTrigger,
-} from '@/components/ui/sidebar-custom'; // Using custom sidebar from example
-import { Button } from '@/components/ui/button';
-import { PanelLeft, Eye } from 'lucide-react';
-import { useAccessibility } from '@/contexts/AccessibilityContext';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Eye } from 'lucide-react';
 
-export default function Home() {
-  const { isColorblindModeEnabled, toggleColorblindMode } = useAccessibility();
+export default function WelcomePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push('/preview');
+    }, 4000); // Redirect after 4 seconds
+
+    return () => clearTimeout(timer);
+  }, [router]);
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="flex min-h-screen bg-background">
-        <Sidebar className="border-r">
-          <SidebarHeader className="p-4">
-            <SidebarTitle className="font-headline text-2xl tracking-tight">Chromatic Harmony</SidebarTitle>
-          </SidebarHeader>
-          <SidebarContent>
-            <SettingsPanel />
-          </SidebarContent>
-        </Sidebar>
-        <SidebarInset>
-          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 sm:px-6">
-             <SidebarTrigger className="md:hidden" asChild>
-              <Button size="icon" variant="outline">
-                <PanelLeft className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SidebarTrigger>
-            <h1 className="font-headline text-xl md:text-2xl grow font-bold text-foreground">
-              Accessibility Preview
-            </h1>
-            <div className="flex items-center space-x-3">
-              <Switch
-                id="global-colorblind-mode-toggle"
-                checked={isColorblindModeEnabled}
-                onCheckedChange={toggleColorblindMode}
-                aria-label="Toggle Accessibility Mode"
-              />
-              <Label htmlFor="global-colorblind-mode-toggle" className="text-sm font-medium flex items-center cursor-pointer">
-                <Eye className="mr-2 h-5 w-5 text-muted-foreground" />
-                Accessibility Mode
-              </Label>
-            </div>
-          </header>
-          <main className="flex-1 overflow-auto p-4 md:p-8">
-            <PreviewArea />
-          </main>
-        </SidebarInset>
+    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white overflow-hidden">
+      <div className="text-center">
+        <div className="animate-fade-in-up">
+          <Eye className="mx-auto h-24 w-24 text-blue-400 animate-pulse" />
+          <h1 className="mt-8 text-5xl md:text-7xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-300">
+            Chromatic Harmony
+          </h1>
+          <p className="mt-4 text-lg md:text-xl text-gray-300">
+            Building a more accessible web, one color at a time.
+          </p>
+        </div>
       </div>
-    </SidebarProvider>
+    </div>
   );
 }
