@@ -9,11 +9,11 @@ export default function WelcomePage() {
   const router = useRouter();
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background text-foreground overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
       <div className="text-center p-4">
-        <div className="animate-fade-in-up">
-          <Eye className="mx-auto h-24 w-24 text-primary animate-pulse" />
-          <h1 className="mt-8 text-5xl md:text-7xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+        <div>
+          <Eye className="mx-auto h-24 w-24 text-primary" />
+          <h1 className="mt-8 text-5xl md:text-7xl font-bold tracking-tight text-primary">
             ColorEase
           </h1>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground">
@@ -21,8 +21,7 @@ export default function WelcomePage() {
           </p>
           <Button 
             size="lg" 
-            className="mt-12 animate-fade-in-up" 
-            style={{ animationDelay: '0.3s' }}
+            className="mt-12"
             onClick={() => router.push('/preview')}
           >
             Let's Start
