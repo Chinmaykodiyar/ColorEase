@@ -11,7 +11,7 @@ export default function WelcomePage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
       <div className="text-center p-4">
-        <div>
+        <div className="animate-fade-in-up">
           <Eye className="mx-auto h-24 w-24 text-primary" />
           <h1 className="mt-8 text-5xl md:text-7xl font-bold tracking-tight text-primary">
             ColorEase
