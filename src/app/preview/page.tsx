@@ -26,7 +26,7 @@ export default function PreviewPage() {
       <div className="flex min-h-screen bg-background">
         <Sidebar className="border-r">
           <SidebarHeader className="p-4">
-            <SidebarTitle className="font-headline text-2xl tracking-tight">Chromatic Harmony</SidebarTitle>
+            <SidebarTitle className="font-headline text-2xl tracking-tight">ColorEase</SidebarTitle>
           </SidebarHeader>
           <SidebarContent>
             <SettingsPanel />

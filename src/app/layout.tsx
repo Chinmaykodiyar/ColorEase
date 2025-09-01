@@ -4,7 +4,7 @@ import { AccessibilityProvider } from '@/contexts/AccessibilityContext';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Chromatic Harmony',
+  title: 'ColorEase',
   description: 'Enhanced accessibility for colorblind users.',
 };
 
