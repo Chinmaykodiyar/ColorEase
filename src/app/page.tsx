@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -17,6 +17,13 @@ export default function WelcomePage() {
       router.push('/preview');
     }, 500); // Match this duration with the fade-out animation
   };
+  
+  // This effect will run when the component unmounts, resetting the state
+  useEffect(() => {
+    return () => {
+      setIsExiting(false);
+    };
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen text-white gradient-bg">
