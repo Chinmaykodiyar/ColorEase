@@ -29,7 +29,7 @@ export default function WelcomePage() {
     <div className="flex items-center justify-center min-h-screen text-white gradient-bg">
       <div
         className={cn(
-          'text-center p-8 transition-opacity duration-500 ease-in-out',
+          'text-center p-8 transition-opacity duration-500 ease-in-out z-10',
           isExiting ? 'animate-fade-out' : 'animate-fade-in-up'
         )}
       >
