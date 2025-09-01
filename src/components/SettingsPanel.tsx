@@ -82,12 +82,12 @@ export function SettingsPanel() {
 
 
   return (
-    <ScrollArea className="h-full p-4">
-      <div className="space-y-8">
-        <Card>
+    <ScrollArea className="h-full">
+      <div className="space-y-6 p-1">
+        <Card className="border-none shadow-none">
           <CardHeader>
-            <CardTitle className="font-headline flex items-center"><Palette className="mr-2 h-5 w-5" />Vision Simulation</CardTitle>
-            <CardDescription>Simulate how users with different types of color vision deficiency perceive colors. This is active when Mode is on.</CardDescription>
+            <CardTitle className="font-headline flex items-center text-lg"><Palette className="mr-2 h-5 w-5" />Vision Simulation</CardTitle>
+            <CardDescription>Simulate how users with different types of color vision perceive your UI.</CardDescription>
           </CardHeader>
           <CardContent>
             <Select
@@ -109,36 +109,18 @@ export function SettingsPanel() {
                 ))}
               </SelectContent>
             </Select>
-            {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Mode in the header to change simulation.</p>}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline flex items-center"><SlidersHorizontal className="mr-2 h-5 w-5" />Corrective Filters</CardTitle>
-            <CardDescription>These filters adjust colors to make them more distinct for colorblind users. This is separate from simulation.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             <Button
-              variant="ghost"
-              size="sm"
-              className="w-full mt-2"
-              onClick={() => handleSetPalette("default")}
-              disabled={!isColorblindModeEnabled || currentPalette === 'default'}
-          >
-              Turn off simulation to use filters
-          </Button>
+            {!isColorblindModeEnabled && <p className="text-xs text-muted-foreground mt-2">Enable Accessibility Mode in the header to change simulation.</p>}
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="border-none shadow-none">
           <CardHeader>
-            <CardTitle className="font-headline flex items-center"><Sparkles className="mr-2 h-5 w-5" />AI-Powered Corrective Filters</CardTitle>
-            <CardDescription>Generate and apply CSS filters to improve color distinction. Active when Mode is enabled and simulation is off.</CardDescription>
+            <CardTitle className="font-headline flex items-center text-lg"><Sparkles className="mr-2 h-5 w-5" />AI Corrective Filters</CardTitle>
+            <CardDescription>Generate and apply CSS filters to improve color distinction for specific conditions.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="colorblindness-type-select">Target Colorblindness Type</Label>
+              <Label htmlFor="colorblindness-type-select">Target Condition</Label>
               <Select
                 value={selectedColorblindnessType}
                 onValueChange={(value) => setSelectedColorblindnessType(value as ColorblindnessType)}
@@ -162,26 +144,28 @@ export function SettingsPanel() {
             
             <Button onClick={handleGenerateFilters} disabled={isLoadingFilters || !isColorblindModeEnabled || currentPalette !== 'default'} className="w-full">
               {isLoadingFilters && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Generate Corrective Filters
+              Generate Filters
             </Button>
-             {isColorblindModeEnabled && currentPalette !== 'default' && <p className="text-xs text-muted-foreground mt-2">Turn off simulation to generate filters.</p>}
+            {isColorblindModeEnabled && currentPalette !== 'default' && <p className="text-xs text-muted-foreground mt-2 text-center">Disable simulation to generate corrective filters.</p>}
 
 
             {generatedFilters.length > 0 && (
               <div className="space-y-2 pt-4">
-                <Label>Generated Filter Combinations:</Label>
+                <Label>Generated Filter Combinations</Label>
                 <ScrollArea className="h-[200px] w-full rounded-md border p-2">
                   {generatedFilters.map((filter) => (
                     <Button
                       key={filter.name}
-                      variant={activeFilterName === filter.name ? "default" : "outline"}
+                      variant={activeFilterName === filter.name ? "secondary" : "outline"}
                       size="sm"
-                      className="w-full justify-start mb-2 text-left"
+                      className="w-full justify-start mb-2 text-left h-auto py-2"
                       onClick={() => handleApplyFilter(filter.name, filter.filterSettings)}
                       disabled={!isColorblindModeEnabled || currentPalette !== 'default'}
-                      title={filter.description}
                     >
-                      {filter.name}
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{filter.name}</span>
+                        <span className="text-xs text-muted-foreground font-normal">{filter.description}</span>
+                      </div>
                     </Button>
                   ))}
                 </ScrollArea>

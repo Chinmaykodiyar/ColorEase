@@ -8,33 +8,33 @@ body {
 
 @layer base {
   :root {
-    --background: 255 67% 98.2%; /* #F8F7FC - Soft Off-white */
-    --foreground: 240 10% 3.9%; /* Default dark, good contrast for text */
+    --background: 240 5% 96.1%; /* Light Gray */
+    --foreground: 240 10% 3.9%;
 
-    --card: 255 67% 98.2%; /* Consistent with background */
-    --card-foreground: 240 10% 3.9%; /* Consistent with foreground */
+    --card: 240 5% 100%; /* White */
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 255 67% 98.2%; /* Consistent with background */
-    --popover-foreground: 240 10% 3.9%; /* Consistent with foreground */
+    --popover: 240 5% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
-    --primary: 260 100% 86.3%; /* #D0B8FF - Lavender */
-    --primary-foreground: 260 60% 25%; /* Darker purple for text on primary */
+    --primary: 262.1 83.3% 57.8%; /* Vibrant Purple */
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 250 60% 95%; /* Lighter, related to background */
-    --secondary-foreground: 250 10% 10%; /* Darker text for secondary */
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 250 40% 92%; /* Muted shade */
-    --muted-foreground: 250 8% 45%; /* Text for muted */
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 202 68.4% 83.3%; /* #A0D2EB - Muted Sky Blue */
-    --accent-foreground: 202 50% 25%; /* Darker blue for text on accent */
+    --accent: 34.9 98.6% 51.4%; /* Bright Orange */
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 84.2% 60.2%; /* Standard destructive */
-    --destructive-foreground: 0 0% 98%; /* Light text for destructive */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 250 30% 88%; /* Border color */
-    --input: 250 30% 92%; /* Input background, slightly lighter than border */
-    --ring: 260 100% 70%; /* Focus ring, based on primary */
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 262.1 83.3% 57.8%;
 
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -42,11 +42,10 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Sidebar specific colors, can be adjusted if needed or inherit from main theme */
-    --sidebar-background: 240 5% 96%; /* Slightly off-white/light gray */
-    --sidebar-foreground: 240 10% 20%; /* Dark text for sidebar */
+    --sidebar-background: 240 5% 96%;
+    --sidebar-foreground: 240 10% 20%;
     --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: var(--primary-foreground);
     --sidebar-accent: var(--accent);
@@ -56,7 +55,6 @@ body {
   }
 
   .dark {
-    /* Dark theme overrides - keeping defaults for now, can be customized if dark mode is added */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -66,24 +64,24 @@ body {
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 260 100% 86.3%; /* Lavender, can be adjusted for dark */
-    --primary-foreground: 260 80% 30%; /* Brighter text on dark primary */
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 240 5% 14.9%;
+    --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 5% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --accent: 202 68.4% 83.3%; /* Muted Sky Blue, can be adjusted for dark */
-    --accent-foreground: 202 70% 30%; /* Brighter text on dark accent */
+    --accent: 34.9 98.6% 51.4%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5% 14.9%;
-    --input: 240 5% 14.9%;
-    --ring: 260 100% 75%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 262.1 83.3% 57.8%;
 
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
