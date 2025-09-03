@@ -43,7 +43,7 @@ export function SettingsPanel() {
 
   const handleGenerateFilters = async () => {
     setIsLoadingFilters(true);
-    setGeneratedFilters([]);
+    // setGeneratedFilters([]); // This line is causing the glitch, so we'll remove it.
     try {
       const result = await generateSafeFilterCombinations({
         colorblindnessType: selectedColorblindnessType,
@@ -89,7 +89,7 @@ export function SettingsPanel() {
             <CardTitle className="font-headline flex items-center justify-center text-lg"><Palette className="mr-2 h-5 w-5" />Vision Simulation</CardTitle>
             <CardDescription>Simulate how different users see your UI.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col items-center justify-center">
             <Select
               value={currentPalette}
               onValueChange={(value) => handleSetPalette(value as PaletteType)}
@@ -118,8 +118,8 @@ export function SettingsPanel() {
             <CardTitle className="font-headline flex items-center justify-center text-lg"><Sparkles className="mr-2 h-5 w-5" />AI Corrective Filters</CardTitle>
             <CardDescription>Generate filters to improve color distinction.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
+          <CardContent className="space-y-4 flex flex-col items-center justify-center">
+            <div className="w-full">
               <Label htmlFor="colorblindness-type-select" className="inline-block text-center w-full mb-1">Target Condition</Label>
               <Select
                 value={selectedColorblindnessType}
@@ -150,7 +150,7 @@ export function SettingsPanel() {
 
 
             {generatedFilters.length > 0 && (
-              <div className="space-y-2 pt-4">
+              <div className="space-y-2 pt-4 w-full">
                 <Label className="inline-block text-center w-full">Generated Filter Combinations</Label>
                 <ScrollArea className="h-[200px] w-full rounded-md border p-2">
                   {generatedFilters.map((filter) => (
