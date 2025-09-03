@@ -29,19 +29,19 @@ export default function WelcomePage() {
     <div className="flex items-center justify-center min-h-screen text-white gradient-bg">
       <div
         className={cn(
-          'text-center p-8 transition-opacity duration-500 ease-in-out z-10',
+          'text-center p-8 max-w-2xl mx-auto transition-opacity duration-500 ease-in-out z-10',
           isExiting ? 'animate-fade-out' : 'animate-fade-in-up'
         )}
       >
-        <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 bg-clip-text text-transparent bg-white/80">
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-white/90">
           Welcome
         </h1>
-        <p className="text-lg md:text-xl text-white/70 mb-12">
+        <p className="text-lg md:text-xl text-white/80 mb-12 max-w-md mx-auto">
           We’re glad you’re here!
         </p>
         <Button
           size="lg"
-          className="bg-white/90 text-slate-800 rounded-full shadow-2xl transform transition-transform hover:scale-110 hover:bg-white text-base font-semibold"
+          className="bg-white/90 text-slate-900 rounded-full shadow-2xl transform transition-transform hover:scale-105 hover:bg-white text-lg font-semibold px-10 py-6"
           onClick={handleStart}
         >
           Let’s Start
