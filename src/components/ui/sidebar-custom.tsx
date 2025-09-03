@@ -233,8 +233,7 @@ export const SidebarInset = React.forwardRef<
       ref={ref}
       className={cn(
         "flex-1 transition-all duration-300 ease-in-out",
-        isOpen && !isMobile ? "md:ml-72" : "md:ml-0", 
-        !isOpen && !isMobile ? "md:ml-16" : "", 
+        isOpen && !isMobile ? "md:ml-72" : "md:ml-16",
         className
       )}
       {...props}
