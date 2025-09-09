@@ -82,11 +82,11 @@ export function SettingsPanel() {
 
 
   return (
-    <ScrollArea className="h-full">
-      <div className="space-y-6 p-4 text-center">
-        <Card className="border-none shadow-none">
+    <ScrollArea className="h-full -mx-4">
+      <div className="space-y-6 p-4">
+        <Card className="bg-transparent border-none shadow-none">
           <CardHeader>
-            <CardTitle className="font-headline flex items-center justify-center text-lg"><Palette className="mr-2 h-5 w-5" />Vision Simulation</CardTitle>
+            <CardTitle className="font-headline flex items-center text-lg"><Palette className="mr-2 h-5 w-5 text-primary" />Vision Simulation</CardTitle>
             <CardDescription>Simulate how different users see your UI.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center">
@@ -113,14 +113,14 @@ export function SettingsPanel() {
           </CardContent>
         </Card>
         
-        <Card className="border-none shadow-none">
+        <Card className="bg-transparent border-none shadow-none">
           <CardHeader>
-            <CardTitle className="font-headline flex items-center justify-center text-lg"><Sparkles className="mr-2 h-5 w-5" />AI Corrective Filters</CardTitle>
+            <CardTitle className="font-headline flex items-center text-lg"><Sparkles className="mr-2 h-5 w-5 text-primary" />AI Corrective Filters</CardTitle>
             <CardDescription>Generate filters to improve color distinction.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 flex flex-col items-center justify-center">
             <div className="w-full">
-              <Label htmlFor="colorblindness-type-select" className="inline-block text-center w-full mb-1">Target Condition</Label>
+              <Label htmlFor="colorblindness-type-select" className="text-sm font-medium text-muted-foreground mb-2 block">Target Condition</Label>
               <Select
                 value={selectedColorblindnessType}
                 onValueChange={(value) => setSelectedColorblindnessType(value as ColorblindnessType)}
@@ -151,7 +151,7 @@ export function SettingsPanel() {
 
             {generatedFilters.length > 0 && (
               <div className="space-y-2 pt-4 w-full">
-                <Label className="inline-block text-center w-full">Generated Filter Combinations</Label>
+                <Label className="inline-block text-center w-full text-sm font-medium text-muted-foreground mb-2">Generated Filter Combinations</Label>
                 <ScrollArea className="h-[200px] w-full rounded-md border p-2">
                   {generatedFilters.map((filter) => (
                     <Button

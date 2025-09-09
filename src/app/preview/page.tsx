@@ -15,11 +15,6 @@ export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 sm:px-6">
-        {/* This button can be wired up to toggle a mobile-only sidebar if needed in the future */}
-        {/* <Button size="icon" variant="outline" className="md:hidden">
-          <PanelLeft className="h-5 w-5" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button> */}
         <h1 className="font-headline text-xl md:text-2xl grow font-bold text-foreground">
           Chromatic Harmony
         </h1>
@@ -38,9 +33,9 @@ export default function PreviewPage() {
       </header>
       
       <div className="flex flex-row">
-        <aside className="w-[340px] border-r bg-background p-4 hidden md:block">
+        <aside className="w-[340px] border-r bg-card p-4 hidden md:block">
           <div className="flex items-center gap-3 mb-5">
-            <div className="font-headline text-2xl tracking-tight font-bold">
+            <div className="font-headline text-2xl tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-br from-primary to-accent">
               ColorEase
             </div>
           </div>
