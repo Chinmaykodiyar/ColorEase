@@ -1,17 +1,8 @@
 
-"use client"; // Required for SidebarProvider and other client components
+"use client";
 
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { PreviewArea } from '@/components/PreviewArea';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarInset,
-  SidebarProvider,
-  SidebarTitle,
-  SidebarTrigger,
-} from '@/components/ui/sidebar-custom'; // Using custom sidebar from example
 import { Button } from '@/components/ui/button';
 import { PanelLeft, Eye } from 'lucide-react';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
@@ -22,45 +13,46 @@ export default function PreviewPage() {
   const { isColorblindModeEnabled, toggleColorblindMode } = useAccessibility();
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="flex min-h-screen bg-background">
-        <Sidebar className="border-r">
-          <SidebarHeader className="p-4">
-            <SidebarTitle className="font-headline text-2xl tracking-tight">ColorEase</SidebarTitle>
-          </SidebarHeader>
-          <SidebarContent>
-            <SettingsPanel />
-          </SidebarContent>
-        </Sidebar>
-        <SidebarInset>
-          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 sm:px-6">
-             <SidebarTrigger className="md:hidden" asChild>
-              <Button size="icon" variant="outline">
-                <PanelLeft className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SidebarTrigger>
-            <h1 className="font-headline text-xl md:text-2xl grow font-bold text-foreground">
-              Accessibility Preview
-            </h1>
-            <div className="flex items-center space-x-3">
-              <Switch
-                id="global-colorblind-mode-toggle"
-                checked={isColorblindModeEnabled}
-                onCheckedChange={toggleColorblindMode}
-                aria-label="Toggle Accessibility Mode"
-              />
-              <Label htmlFor="global-colorblind-mode-toggle" className="text-sm font-medium flex items-center cursor-pointer">
-                <Eye className="mr-2 h-5 w-5 text-muted-foreground" />
-                Accessibility Mode
-              </Label>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 sm:px-6">
+        {/* This button can be wired up to toggle a mobile-only sidebar if needed in the future */}
+        {/* <Button size="icon" variant="outline" className="md:hidden">
+          <PanelLeft className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
+        </Button> */}
+        <h1 className="font-headline text-xl md:text-2xl grow font-bold text-foreground">
+          Chromatic Harmony
+        </h1>
+        <div className="flex items-center space-x-3">
+          <Switch
+            id="global-colorblind-mode-toggle"
+            checked={isColorblindModeEnabled}
+            onCheckedChange={toggleColorblindMode}
+            aria-label="Toggle Accessibility Mode"
+          />
+          <Label htmlFor="global-colorblind-mode-toggle" className="text-sm font-medium flex items-center cursor-pointer">
+            <Eye className="mr-2 h-5 w-5 text-muted-foreground" />
+            Accessibility Mode
+          </Label>
+        </div>
+      </header>
+      
+      <div className="flex flex-row">
+        <aside className="w-[340px] border-r bg-background p-4 hidden md:block">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="font-headline text-2xl tracking-tight font-bold">
+              ColorEase
             </div>
-          </header>
-          <main className="flex-1 overflow-auto">
+          </div>
+          <SettingsPanel />
+        </aside>
+        
+        <main className="flex-1 overflow-auto">
+          <div className="p-4 md:p-6">
             <PreviewArea />
-          </main>
-        </SidebarInset>
+          </div>
+        </main>
       </div>
-    </SidebarProvider>
+    </div>
   );
 }
