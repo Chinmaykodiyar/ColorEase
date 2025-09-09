@@ -82,8 +82,7 @@ export default function WelcomePage() {
           ColorEase
         </h1>
         <p className="text-md md:text-lg text-slate-600 mb-10 max-w-2xl mx-auto">
-          Chromatic Harmony helps you experience the web with clarity and comfort.
-          Let's adjust the view to what suits you best.
+          Making every shade accessible, so everyone can experience the world in full clarity and comfort.
         </p>
         <Button
           size="lg"
