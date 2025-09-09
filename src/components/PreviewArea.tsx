@@ -88,30 +88,14 @@ export function PreviewArea() {
 
   return (
     <div className="space-y-8 p-4 md:p-6">
-       <Card className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+      <Card className="animate-fade-in-up">
         <CardHeader>
-          <CardTitle className="font-headline">Sample Chart</CardTitle>
-          <CardDescription>
-            Charts use distinct colors. For enhanced accessibility, patterns or textures can be applied to chart elements.
-          </CardDescription>
+          <CardTitle className="font-headline">Text & Typography</CardTitle>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
-                <YAxis tickLine={false} axisLine={false} tickMargin={8} />
-                <RechartsTooltip 
-                  cursor={{ fill: 'hsl(var(--muted))', radius: 'var(--radius)' }} 
-                  content={<ChartTooltipContent />} 
-                />
-                <Legend />
-                <Bar dataKey="desktop" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="mobile" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+        <CardContent className="space-y-4">
+          <p className="text-lg">This is a sample paragraph showing default text rendering. <span className="text-primary font-medium">This text is primary color.</span> <span className="text-accent-foreground bg-accent p-1 rounded-md">This text is accent color.</span></p>
+          <h2 className="text-2xl font-headline text-secondary-foreground">Secondary Heading Example</h2>
+          <p className="text-sm text-muted-foreground">This is muted text, often used for less important information or captions.</p>
         </CardContent>
       </Card>
 
@@ -207,16 +191,34 @@ export function PreviewArea() {
         </Card>
       </div>
 
-      <Card className="animate-fade-in-up">
+       <Card className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
         <CardHeader>
-          <CardTitle className="font-headline">Text & Typography</CardTitle>
+          <CardTitle className="font-headline">Sample Chart</CardTitle>
+          <CardDescription>
+            Charts use distinct colors. For enhanced accessibility, patterns or textures can be applied to chart elements.
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-lg">This is a sample paragraph showing default text rendering. <span className="text-primary font-medium">This text is primary color.</span> <span className="text-accent-foreground bg-accent p-1 rounded-md">This text is accent color.</span></p>
-          <h2 className="text-2xl font-headline text-secondary-foreground">Secondary Heading Example</h2>
-          <p className="text-sm text-muted-foreground">This is muted text, often used for less important information or captions.</p>
+        <CardContent>
+          <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
+                <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+                <RechartsTooltip 
+                  cursor={{ fill: 'hsl(var(--muted))', radius: 'var(--radius)' }} 
+                  content={<ChartTooltipContent />} 
+                />
+                <Legend />
+                <Bar dataKey="desktop" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="mobile" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
     </div>
   );
 }
+
+    
