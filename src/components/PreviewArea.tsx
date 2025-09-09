@@ -87,7 +87,7 @@ export function PreviewArea() {
 
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-4 md:p-6">
       <Card className="animate-fade-in-up">
         <CardHeader>
           <CardTitle className="font-headline">Text & Typography</CardTitle>
