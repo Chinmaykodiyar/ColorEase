@@ -79,7 +79,7 @@ export default function WelcomePage() {
       >
         <WelcomeIllustration />
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight mt-8 mb-4 text-slate-900">
-          Discover a More Vivid Web
+          ColorEase
         </h1>
         <p className="text-md md:text-lg text-slate-600 mb-10 max-w-2xl mx-auto">
           Chromatic Harmony helps you experience the web with clarity and comfort.
