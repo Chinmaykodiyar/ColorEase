@@ -35,9 +35,7 @@ export default function PreviewPage() {
       <div className="flex flex-row">
         <aside className="w-[340px] border-r bg-card p-4 hidden md:block">
           <div className="flex items-center gap-3 mb-5">
-            <div className="font-headline text-2xl tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-br from-primary to-accent">
-              ColorEase
-            </div>
+            
           </div>
           <SettingsPanel />
         </aside>
