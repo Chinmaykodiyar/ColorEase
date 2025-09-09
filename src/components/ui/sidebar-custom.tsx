@@ -155,7 +155,7 @@ export const SidebarHeader = React.forwardRef<
       ref={ref}
       className={cn(
         "p-4 transition-opacity duration-300",
-        !isOpen && !isMobile && "opacity-0 md:opacity-100 md:p-2 md:flex md:flex-col md:items-center", // Show icons when collapsed on desktop
+        !isOpen && !isMobile && "md:p-2 md:flex md:flex-col md:items-center", // Show icons when collapsed on desktop
         className
       )}
       {...props}
@@ -233,7 +233,7 @@ export const SidebarInset = React.forwardRef<
       ref={ref}
       className={cn(
         "flex-1 transition-all duration-300 ease-in-out",
-        isOpen && !isMobile ? "md:ml-72" : "md:ml-0",
+        isOpen && !isMobile ? "md:ml-72" : "md:ml-16",
         className
       )}
       {...props}
