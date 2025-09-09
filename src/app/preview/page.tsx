@@ -15,7 +15,7 @@ export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 sm:px-6">
-        <h1 className="font-headline text-xl md:text-2xl grow font-bold text-foreground">
+        <h1 className="font-headline text-2xl tracking-tight grow font-bold bg-clip-text text-transparent bg-gradient-to-br from-primary to-accent">
           ColorEase
         </h1>
         <div className="flex items-center space-x-3">
